@@ -1,0 +1,12 @@
+version: '3'
+
+interval: 500ms
+
+tasks:
+  watch:
+    desc: Run tests on change
+    watch: true
+    sources:
+      - '**/*.go'
+    cmds:
+      - go test ./...

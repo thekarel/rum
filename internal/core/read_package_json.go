@@ -2,7 +2,6 @@ package core
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 )
@@ -15,14 +14,14 @@ func Read_package_json(filePath string) (map[string]string, error) {
 	fmt.Println("Reading package.json", filePath)
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Error reading the package.json at %s: %v", filePath, err))
+		return nil, fmt.Errorf("Error reading the package.json at %s: %v", filePath, err)
 	}
 
 	var data packageJson
 
 	err = json.Unmarshal(content, &data)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Parse error at %s: %v", filePath, err))
+		return nil, fmt.Errorf("Parse error at %s: %v", filePath, err)
 	}
 
 	return data.Scripts, nil
