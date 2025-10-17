@@ -3,8 +3,11 @@ package internal
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"codeberg.org/thekarel/rum/internal/core"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func Pick_and_run(searchPath string) {
@@ -13,10 +16,14 @@ func Pick_and_run(searchPath string) {
 		log.Fatal(err)
 	}
 
-	scripts, err := core.Read_package_json(path)
+	packageJson, err := core.Read_package_json(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(scripts)
+	p := tea.NewProgram(initialModel(packageJson, path))
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Alas, there's been an error: %v", err)
+		os.Exit(1)
+	}
 }

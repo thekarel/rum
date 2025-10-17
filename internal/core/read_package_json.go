@@ -6,23 +6,23 @@ import (
 	"os"
 )
 
-type packageJson struct {
+type PackageJson struct {
 	Scripts map[string]string
+	Name    string
 }
 
-func Read_package_json(filePath string) (map[string]string, error) {
-	fmt.Println("Reading package.json", filePath)
+func Read_package_json(filePath string) (PackageJson, error) {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("Error reading the package.json at %s: %v", filePath, err)
+		return PackageJson{}, fmt.Errorf("Error reading the package.json at %s: %v", filePath, err)
 	}
 
-	var data packageJson
+	var data PackageJson
 
 	err = json.Unmarshal(content, &data)
 	if err != nil {
-		return nil, fmt.Errorf("Parse error at %s: %v", filePath, err)
+		return PackageJson{}, fmt.Errorf("Parse error at %s: %v", filePath, err)
 	}
 
-	return data.Scripts, nil
+	return data, nil
 }
