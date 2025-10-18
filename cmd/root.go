@@ -20,7 +20,12 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		internal.Pick_and_run(args[0])
+		path := "."
+
+		if len(args) == 1 {
+			path = args[0]
+		}
+		internal.Pick_and_run(path)
 	},
 }
 
