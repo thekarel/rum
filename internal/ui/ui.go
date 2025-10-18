@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/charmbracelet/lipgloss/list"
 )
 
 var tokens = struct {
@@ -19,39 +18,40 @@ var tokens = struct {
 	primaryBg: "#0B132B",
 }
 
-var titleStyle = lipgloss.NewStyle().
-	Bold(true).
-	Foreground(lipgloss.Color(tokens.primary)).
+var ListItemTitleStyle = lipgloss.NewStyle().
+	Foreground(lipgloss.AdaptiveColor{Light: tokens.primaryBg, Dark: tokens.secondary}).
+	Padding(0, 0, 0, 2)
+
+var ListItemActiveTitleStyle = lipgloss.NewStyle().
+	Inherit(ListItemTitleStyle).
+	Border(lipgloss.NormalBorder(), false, false, false, true).
+	BorderForeground(lipgloss.AdaptiveColor{Light: tokens.secondary, Dark: tokens.secondary}).
+	Padding(0, 0, 0, 1)
+
+var ListItemDescriptionStyle = lipgloss.NewStyle().
+	Foreground(lipgloss.AdaptiveColor{Light: tokens.tertiary, Dark: tokens.tertiary}).
+	Padding(0, 0, 0, 2)
+
+var ListItemActiveDescriptionStyle = lipgloss.NewStyle().
+	Inherit(ListItemDescriptionStyle).
+	Border(lipgloss.NormalBorder(), false, false, false, true).
+	BorderForeground(lipgloss.AdaptiveColor{Light: tokens.secondary, Dark: tokens.secondary}).
+	Padding(0, 0, 0, 1)
+
+var HeaderStyle = lipgloss.NewStyle().
 	Background(lipgloss.Color(tokens.primaryBg)).
-	PaddingLeft(2).
-	PaddingRight(2).
+	Padding(2).
 	Width(80)
 
-var subTitleStyle = titleStyle.
-	Bold(false).
+var titleStyle = lipgloss.NewStyle().
+	Bold(true).
+	Foreground(lipgloss.Color(tokens.primary))
+
+var subTitleStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color(tokens.tertiary))
 
-func Title(main, sub string) string {
-	return fmt.Sprintf(
-		"%s\n%s\n%s\n%s",
-		titleStyle.Render(" "),
-		titleStyle.Render(main),
-		subTitleStyle.Render(sub),
-		titleStyle.Render(" "),
+func Header(main, sub string) string {
+	return HeaderStyle.Render(
+		fmt.Sprintf("%s\n%s", titleStyle.Render(main), subTitleStyle.Render(sub)),
 	)
-}
-
-func ScriptList(scripts map[string]string) string {
-	boxStyle := lipgloss.NewStyle().
-		Border(lipgloss.NormalBorder()).
-		Width(78).
-		Padding(1)
-
-	var items []string
-
-	for name, command := range scripts {
-		items = append(items, fmt.Sprintf("%s: %s", lipgloss.NewStyle().Bold(true).Render(name), command))
-	}
-
-	return fmt.Sprint(boxStyle.Render(list.New(items).String()))
 }

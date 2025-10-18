@@ -3,57 +3,80 @@ package internal
 import (
 	"codeberg.org/thekarel/rum/internal/core"
 	"codeberg.org/thekarel/rum/internal/ui"
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type model struct {
 	filePath    string
 	packageJson core.PackageJson
+	scriptList  list.Model
+}
+
+// item is for the script list
+type item struct {
+	name, cmd string
+}
+
+func (i item) Title() string {
+	return i.name
+}
+func (i item) Description() string {
+	return i.cmd
+}
+func (i item) FilterValue() string {
+	return i.name
 }
 
 func initialModel(packageJson core.PackageJson, filePath string) model {
+	listItems := []list.Item{}
+
+	for name, cmd := range packageJson.Scripts {
+		listItems = append(listItems, item{name: name, cmd: cmd})
+	}
+
+	delegate := list.NewDefaultDelegate()
+	delegate.Styles.NormalTitle = ui.ListItemTitleStyle
+	delegate.Styles.SelectedTitle = ui.ListItemActiveTitleStyle
+	delegate.Styles.NormalDesc = ui.ListItemDescriptionStyle
+	delegate.Styles.SelectedDesc = ui.ListItemActiveDescriptionStyle
+	scriptList := list.New(listItems, delegate, 80, 20)
+	scriptList.SetShowTitle(false)
+	scriptList.SetShowStatusBar(false)
+
 	return model{
 		filePath:    filePath,
 		packageJson: packageJson,
+		scriptList:  scriptList,
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	// Just return `nil`, which means "no I/O right now, please."
 	return nil
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+
 	switch msg := msg.(type) {
-
-	// Is it a key press?
 	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
-		switch msg.String() {
-
-		// These keys should exit the program.
-		case "ctrl+c", "q":
+		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
+		// case tea.WindowSizeMsg:
+		// 	h, v := listStyle.GetFrameSize()
+		// 	m.scriptList.SetSize(msg.Width-h, msg.Height-v)
 	}
 
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
+	var cmd tea.Cmd
+	m.scriptList, cmd = m.scriptList.Update(msg)
+	return m, cmd
 }
 
 func (m model) View() string {
-	// The header
 	s := "\n\n"
-	s += ui.Title(m.packageJson.Name, m.filePath)
+	s += ui.Header(m.packageJson.Name, m.filePath)
 	s += "\n"
+	s += m.scriptList.View()
 
-	s += ui.ScriptList(m.packageJson.Scripts)
-
-	// The footer
-	s += "\nPress q to quit.\n"
-
-	// Send the UI for rendering
 	return s
 }
