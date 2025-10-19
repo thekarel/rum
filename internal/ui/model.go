@@ -1,8 +1,7 @@
-package internal
+package ui
 
 import (
 	"codeberg.org/thekarel/rum/internal/core"
-	"codeberg.org/thekarel/rum/internal/ui"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -28,7 +27,7 @@ func (i item) FilterValue() string {
 	return i.name
 }
 
-func initialModel(packageJson core.PackageJson, filePath string) model {
+func InitialModel(packageJson core.PackageJson, filePath string) model {
 	listItems := []list.Item{}
 
 	for name, cmd := range packageJson.Scripts {
@@ -36,10 +35,10 @@ func initialModel(packageJson core.PackageJson, filePath string) model {
 	}
 
 	delegate := list.NewDefaultDelegate()
-	delegate.Styles.NormalTitle = ui.ListItemTitleStyle
-	delegate.Styles.SelectedTitle = ui.ListItemActiveTitleStyle
-	delegate.Styles.NormalDesc = ui.ListItemDescriptionStyle
-	delegate.Styles.SelectedDesc = ui.ListItemActiveDescriptionStyle
+	delegate.Styles.NormalTitle = ListItemTitleStyle
+	delegate.Styles.SelectedTitle = ListItemActiveTitleStyle
+	delegate.Styles.NormalDesc = ListItemDescriptionStyle
+	delegate.Styles.SelectedDesc = ListItemActiveDescriptionStyle
 	scriptList := list.New(listItems, delegate, 80, 20)
 	scriptList.SetShowTitle(false)
 	scriptList.SetShowStatusBar(false)
@@ -74,7 +73,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	s := "\n\n"
-	s += ui.Header(m.packageJson.Name, m.filePath)
+	s += Header(m.packageJson.Name, m.filePath)
 	s += "\n"
 	s += m.scriptList.View()
 

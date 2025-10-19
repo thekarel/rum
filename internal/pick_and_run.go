@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"codeberg.org/thekarel/rum/internal/core"
+	"codeberg.org/thekarel/rum/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -21,7 +22,7 @@ func Pick_and_run(searchPath string) {
 		log.Fatal(err)
 	}
 
-	p := tea.NewProgram(initialModel(packageJson, path))
+	p := tea.NewProgram(ui.InitialModel(packageJson, path))
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)
