@@ -3,6 +3,12 @@ version: '3'
 interval: 500ms
 
 tasks:
+  lint:
+    desc: Tidy and check code
+    cmds:
+      - go fmt ./...
+      - go test ./...
+
   watch:
     desc: Run tests on change
     watch: true
