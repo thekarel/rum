@@ -22,7 +22,9 @@ func Pick_and_run(searchPath string) {
 		log.Fatal(err)
 	}
 
-	p := tea.NewProgram(ui.InitialModel(packageJson, path))
+	pm := core.Find_package_manager(packageJson, path)
+
+	p := tea.NewProgram(ui.InitialModel(packageJson, path, pm))
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)

@@ -10,6 +10,8 @@ type model struct {
 	filePath    string
 	packageJson core.PackageJson
 	scriptList  list.Model
+	// pm is the package manager, e.g. npm
+	pm string
 }
 
 // item is for the script list
@@ -27,7 +29,7 @@ func (i item) FilterValue() string {
 	return i.name
 }
 
-func InitialModel(packageJson core.PackageJson, filePath string) model {
+func InitialModel(packageJson core.PackageJson, filePath, pm string) model {
 	listItems := []list.Item{}
 
 	for name, cmd := range packageJson.Scripts {
@@ -47,6 +49,7 @@ func InitialModel(packageJson core.PackageJson, filePath string) model {
 		filePath:    filePath,
 		packageJson: packageJson,
 		scriptList:  scriptList,
+		pm:          pm,
 	}
 }
 
@@ -73,7 +76,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	s := "\n\n"
-	s += Header(m.packageJson.Name, m.filePath)
+	s += Header(m.packageJson.Name, m.filePath, m.pm)
 	s += "\n"
 	s += m.scriptList.View()
 

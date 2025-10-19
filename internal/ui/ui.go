@@ -50,8 +50,16 @@ var titleStyle = lipgloss.NewStyle().
 var subTitleStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color(tokens.tertiary))
 
-func Header(main, sub string) string {
+// Header renders the app's header
+// main: the main title, the name of the package
+// sub: the subtitle, the path to the json file
+// pm: the detected package manager
+func Header(main, sub, pm string) string {
 	return HeaderStyle.Render(
-		fmt.Sprintf("%s\n%s", titleStyle.Render(main), subTitleStyle.Render(sub)),
+		fmt.Sprintf(
+			"%s\n%s",
+			titleStyle.Render(main),
+			subTitleStyle.Render(fmt.Sprintf("%s | %s", sub, pm)),
+		),
 	)
 }
