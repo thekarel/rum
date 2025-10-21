@@ -6,62 +6,56 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type model struct {
-	filePath    string
-	packageJson core.PackageJson
-	scriptList  list.Model
+type Model struct {
+	// path is the absolute path to the package.json
+	path string
+	// pj is the relevant content from package.json
+	pj core.PackageJson
+	// scripts is the list of name-command pairs in a bullbe list
+	scripts list.Model
 	// pm is the package manager, e.g. npm
 	pm string
+	// selected is the command selected by the user
+	selected string
 }
 
-// item is for the script list
-type item struct {
-	name, cmd string
+func (m Model) GetSelected() string {
+	return m.selected
 }
 
-func (i item) Title() string {
-	return i.name
-}
-func (i item) Description() string {
-	return i.cmd
-}
-func (i item) FilterValue() string {
-	return i.name
-}
-
-func InitialModel(packageJson core.PackageJson, filePath, pm string) model {
-	listItems := []list.Item{}
+func InitialModel(packageJson core.PackageJson, filePath, pm string) Model {
+	scripts := []list.Item{}
 
 	for name, cmd := range packageJson.Scripts {
-		listItems = append(listItems, item{name: name, cmd: cmd})
+		scripts = append(scripts, script{name: name, cmd: cmd})
 	}
 
-	delegate := list.NewDefaultDelegate()
-	delegate.Styles.NormalTitle = ListItemTitleStyle
-	delegate.Styles.SelectedTitle = ListItemActiveTitleStyle
-	delegate.Styles.NormalDesc = ListItemDescriptionStyle
-	delegate.Styles.SelectedDesc = ListItemActiveDescriptionStyle
-	scriptList := list.New(listItems, delegate, 80, 20)
+	delegate := newScriptListDelegate()
+	scriptList := list.New(scripts, delegate, 80, 20)
 	scriptList.SetShowTitle(false)
 	scriptList.SetShowStatusBar(false)
 
-	return model{
-		filePath:    filePath,
-		packageJson: packageJson,
-		scriptList:  scriptList,
-		pm:          pm,
+	return Model{
+		path:    filePath,
+		pj:      packageJson,
+		scripts: scriptList,
+		pm:      pm,
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "ctrl+c" {
+			return m, tea.Quit
+		}
+		if msg.String() == "enter" {
+			sel := m.scripts.SelectedItem()
+			m.selected = sel.(script).name
 			return m, tea.Quit
 		}
 		// case tea.WindowSizeMsg:
@@ -70,15 +64,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	var cmd tea.Cmd
-	m.scriptList, cmd = m.scriptList.Update(msg)
+	m.scripts, cmd = m.scripts.Update(msg)
 	return m, cmd
 }
 
-func (m model) View() string {
+func (m Model) View() string {
 	s := "\n\n"
-	s += Header(m.packageJson.Name, m.filePath, m.pm)
+	s += Header(m.pj.Name, m.path, m.pm)
 	s += "\n"
-	s += m.scriptList.View()
+	s += m.scripts.View()
 
 	return s
 }
