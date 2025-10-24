@@ -7,18 +7,20 @@ import (
 )
 
 type PackageJson struct {
-	// Scripts are the scripts to run
-	Scripts map[string]string
-	// Name of the project
-	Name string
-	// PackageManager might be set, example: "pnpm@9.15.6"
-	PackageManager string
 	// devEngines.packageManager.name example: "yarn" - this is the NPM standard
 	DevEngines struct {
 		PackageManager struct {
 			Name string
 		}
 	}
+	// description of the project
+	Description string
+	// Name of the project
+	Name string
+	// PackageManager might be set, example: "pnpm@9.15.6"
+	PackageManager string
+	// Scripts are the scripts to run
+	Scripts map[string]string
 }
 
 func Read_package_json(filePath string) (PackageJson, error) {

@@ -6,41 +6,20 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-// script is a record in the script list
-type script struct {
-	name, cmd string
-}
+func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Model {
+	scriptList := list.New(scripts, delegate, w, h)
+	scriptList.SetShowTitle(false)
+	scriptList.SetShowStatusBar(false)
 
-func (i script) Title() string       { return i.name }
-func (i script) Description() string { return i.cmd }
-func (i script) FilterValue() string { return i.name }
+	// Remove left padding from TitleBar (which wraps the filter)
+	scriptList.Styles.TitleBar = lipgloss.NewStyle()
+	// Remove padding from help
+	scriptList.Styles.HelpStyle = lipgloss.NewStyle()
 
-var ListItemTitleStyle = lipgloss.NewStyle().
-	Foreground(lipgloss.AdaptiveColor{Light: tokens.PrimaryBg, Dark: tokens.Secondary}).
-	Padding(0, 0, 0, 2)
+	// Filter prompt and input text style
+	filterStyle :=  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})
+	scriptList.FilterInput.PromptStyle = filterStyle
+	scriptList.FilterInput.TextStyle = filterStyle
 
-var ListItemActiveTitleStyle = lipgloss.NewStyle().
-	Inherit(ListItemTitleStyle).
-	Border(lipgloss.NormalBorder(), false, false, false, true).
-	BorderForeground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary}).
-	Padding(0, 0, 0, 1)
-
-var ListItemDescriptionStyle = lipgloss.NewStyle().
-	Foreground(lipgloss.AdaptiveColor{Light: tokens.Tertiary, Dark: tokens.Tertiary}).
-	Padding(0, 0, 0, 2)
-
-var ListItemActiveDescriptionStyle = lipgloss.NewStyle().
-	Inherit(ListItemDescriptionStyle).
-	Border(lipgloss.NormalBorder(), false, false, false, true).
-	BorderForeground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary}).
-	Padding(0, 0, 0, 1)
-
-func newScriptListDelegate() list.DefaultDelegate {
-	delegate := list.NewDefaultDelegate()
-	delegate.Styles.NormalTitle = ListItemTitleStyle
-	delegate.Styles.SelectedTitle = ListItemActiveTitleStyle
-	delegate.Styles.NormalDesc = ListItemDescriptionStyle
-	delegate.Styles.SelectedDesc = ListItemActiveDescriptionStyle
-
-	return delegate
+	return scriptList
 }

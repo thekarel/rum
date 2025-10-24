@@ -1,22 +1,28 @@
 package ui
 
 import (
+	"os"
+
 	"codeberg.org/thekarel/rum/internal/core"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Model struct {
+	// the width of the name column in the list: the length of the longest name
+	nameWidth int
 	// path is the absolute path to the package.json
 	path string
-	// pj is the relevant content from package.json
-	pj core.PackageJson
-	// scripts is the list of name-command pairs in a bullbe list
-	scripts list.Model
 	// pm is the package manager, e.g. npm
 	pm string
+	// pj is the relevant content from package.json
+	pj core.PackageJson
+	// scriptList is the list of name-command pairs in a bullbe list
+	scriptList list.Model
 	// selected is the command selected by the user
 	selected string
+	// the width of the window
+	winWidth int
 }
 
 func (m Model) GetSelected() string {
@@ -24,26 +30,31 @@ func (m Model) GetSelected() string {
 }
 
 func InitialModel(packageJson core.PackageJson, filePath, pm string) Model {
-	scripts := []list.Item{}
-
-	for name, cmd := range packageJson.Scripts {
-		scripts = append(scripts, script{name: name, cmd: cmd})
+	nameWidth := 0
+	for name := range packageJson.Scripts {
+		if len(name) > nameWidth {
+			nameWidth = len(name)
+		}
 	}
-
-	delegate := newScriptListDelegate()
-	scriptList := list.New(scripts, delegate, 80, 20)
-	scriptList.SetShowTitle(false)
-	scriptList.SetShowStatusBar(false)
+	items := newItems(packageJson.Scripts)
+	// The width will be update once we get the window width in model.Update
+	// In the height +5 is the help bar and other cruft
+	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+4)
 
 	return Model{
-		path:    filePath,
-		pj:      packageJson,
-		scripts: scriptList,
-		pm:      pm,
+		nameWidth:  nameWidth,
+		path:       filePath,
+		pj:         packageJson,
+		pm:         pm,
+		scriptList: scriptList,
 	}
 }
 
 func (m Model) Init() tea.Cmd {
+	if _, set := os.LookupEnv("SNAP"); set == true {
+		return tea.Quit
+	}
+
 	return nil
 }
 
@@ -54,25 +65,25 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 		if msg.String() == "enter" {
-			sel := m.scripts.SelectedItem()
+			sel := m.scriptList.SelectedItem()
 			m.selected = sel.(script).name
 			return m, tea.Quit
 		}
-		// case tea.WindowSizeMsg:
-		// 	h, v := listStyle.GetFrameSize()
-		// 	m.scriptList.SetSize(msg.Width-h, msg.Height-v)
+	case tea.WindowSizeMsg:
+		m.winWidth = msg.Width
+		m.scriptList.SetWidth(msg.Width)
 	}
 
 	var cmd tea.Cmd
-	m.scripts, cmd = m.scripts.Update(msg)
+	m.scriptList, cmd = m.scriptList.Update(msg)
 	return m, cmd
 }
 
 func (m Model) View() string {
-	s := "\n\n"
-	s += Header(m.pj.Name, m.path, m.pm)
+	s := "\n"
+	s += Header(m.winWidth, m.pj, m.pm, m.path)
 	s += "\n"
-	s += m.scripts.View()
+	s += m.scriptList.View()
 
 	return s
 }

@@ -16,3 +16,12 @@ tasks:
       - '**/*.go'
     cmds:
       - go test ./...
+
+  show:
+    desc: Renders the initial UI on each code change
+    watch: true
+    silent: true
+    sources:
+      - '**/*.go'
+    cmds:
+      - SNAP=1 go run main.go internal/core/testing/script-list/package.json

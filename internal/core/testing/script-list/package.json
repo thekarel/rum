@@ -1,0 +1,29 @@
+{
+  "name": "@thekarel/rum",
+  "description": "This file is used to show a decent length script list",
+  "scripts": {
+    "analyze": "vite-bundle-visualizer",
+    "build": "tsc && vite build",
+    "build:storybook": "storybook build",
+    "clean": "rm -rf dist node_modules",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:migrate": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio",
+    "dev": "vite",
+    "docker:build": "docker build --file Dockerfile .",
+    "docker:down": "docker-compose down",
+    "docker:run": "docker-compose up",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\"",
+    "generate": "codegen run new",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "typecheck": "tsc --noEmit",
+    "validate": "pnpm run typecheck && pnpm run test"
+  }
+}
