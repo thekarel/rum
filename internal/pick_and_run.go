@@ -30,14 +30,12 @@ func Pick_and_run(searchPath string) {
 	modelOut, err := p.Run()
 
 	if err != nil {
-		fmt.Printf("Alas, there's been an error: %v", err)
-		os.Exit(1)
+		log.Fatal("There's been an error", err)
 	}
 
 	model, ok := modelOut.(ui.Model)
 	if ok != true {
-		fmt.Printf("Unable to get the selected command")
-		os.Exit(1)
+		log.Fatal("Unable to get the selected command")
 	}
 
 	name := model.GetSelected()

@@ -29,14 +29,15 @@ func (m Model) GetSelected() string {
 	return m.selected
 }
 
-func InitialModel(packageJson core.PackageJson, filePath, pm string) Model {
+func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 	nameWidth := 0
-	for name := range packageJson.Scripts {
+	for name := range pj.Scripts {
 		if len(name) > nameWidth {
 			nameWidth = len(name)
 		}
 	}
-	items := newItems(packageJson.Scripts)
+
+	items := newItems(pj.Scripts)
 	// The width will be update once we get the window width in model.Update
 	// In the height +5 is the help bar and other cruft
 	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+4)
@@ -44,7 +45,7 @@ func InitialModel(packageJson core.PackageJson, filePath, pm string) Model {
 	return Model{
 		nameWidth:  nameWidth,
 		path:       filePath,
-		pj:         packageJson,
+		pj:         pj,
 		pm:         pm,
 		scriptList: scriptList,
 	}
@@ -66,6 +67,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		if msg.String() == "enter" {
 			sel := m.scriptList.SelectedItem()
+			if sel == nil {
+				return m, nil
+			}
+
 			m.selected = sel.(script).name
 			return m, tea.Quit
 		}

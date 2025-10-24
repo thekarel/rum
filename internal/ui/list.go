@@ -3,7 +3,12 @@ package ui
 import (
 	"codeberg.org/thekarel/rum/internal/ui/tokens"
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/bubbles/paginator"
 	"github.com/charmbracelet/lipgloss"
+)
+
+const (
+	bullet   = "●"
 )
 
 func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Model {
@@ -20,6 +25,22 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	filterStyle :=  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})
 	scriptList.FilterInput.PromptStyle = filterStyle
 	scriptList.FilterInput.TextStyle = filterStyle
+
+	// Navigation dots
+	p := paginator.New()
+	p.Type = paginator.Dots
+	p.ActiveDot =  lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light:tokens.Primary, Dark:tokens.Secondary}).
+		SetString(bullet).
+		PaddingLeft(1).
+		String()
+	p.InactiveDot = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light:tokens.Secondary, Dark:tokens.Tertiary}).
+		SetString(bullet).
+		PaddingLeft(1).
+		String()
+	scriptList.Paginator = p
+	scriptList.Styles.PaginationStyle = lipgloss.NewStyle().PaddingBottom(1)
 
 	return scriptList
 }
