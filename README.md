@@ -21,4 +21,12 @@ Usage:
   rum <path to folder or package.json> [flags]
 ```
 
+# Install
+
+```sh
+go install codeberg.org/thekarel/rum@latest
+```
+
+# Gif
+
 ![Demo](rum.gif)
