@@ -47,7 +47,6 @@ jobs:
           files: |-
             LICENSE
             README.md
-            rum.gif
           keywords: |-
             cli
             tui

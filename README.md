@@ -43,4 +43,4 @@ eget thekarel/rum
 
 # Gif
 
-![Demo](rum.gif)
+![Demo](https://raw.githubusercontent.com/thekarel/rum/main/rum.gif)
