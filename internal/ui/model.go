@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"os"
-
 	"codeberg.org/thekarel/rum/internal/core"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -52,10 +50,6 @@ func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 }
 
 func (m Model) Init() tea.Cmd {
-	if _, set := os.LookupEnv("SNAP"); set == true {
-		return tea.Quit
-	}
-
 	return nil
 }
 
