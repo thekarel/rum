@@ -1,6 +1,6 @@
 package main
 
-import "codeberg.org/thekarel/rum/cmd"
+import "github.com/thekarel/rum/cmd"
 
 func main() {
 	cmd.Execute()

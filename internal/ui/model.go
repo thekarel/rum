@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"codeberg.org/thekarel/rum/internal/core"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/thekarel/rum/internal/core"
 )
 
 type Model struct {

@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"codeberg.org/thekarel/rum/internal/core"
-	"codeberg.org/thekarel/rum/internal/ui"
+	"github.com/thekarel/rum/internal/core"
+	"github.com/thekarel/rum/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"io"
 
-	"codeberg.org/thekarel/rum/internal/ui/tokens"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
 var lineStyle = lipgloss.NewStyle().

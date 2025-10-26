@@ -3,8 +3,8 @@ package cmd
 import (
 	"os"
 
-	"codeberg.org/thekarel/rum/internal"
 	"github.com/spf13/cobra"
+	"github.com/thekarel/rum/internal"
 )
 
 // rootCmd represents the base command when called without any subcommands

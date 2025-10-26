@@ -1,4 +1,4 @@
-module codeberg.org/thekarel/rum
+module github.com/thekarel/rum
 
 go 1.25.1
 

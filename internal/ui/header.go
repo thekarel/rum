@@ -3,9 +3,9 @@ package ui
 import (
 	"fmt"
 
-	"codeberg.org/thekarel/rum/internal/core"
-	"codeberg.org/thekarel/rum/internal/ui/tokens"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/thekarel/rum/internal/core"
+	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
 var headerStyle = lipgloss.NewStyle().

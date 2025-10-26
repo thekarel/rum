@@ -1,10 +1,10 @@
 package ui
 
 import (
-	"codeberg.org/thekarel/rum/internal/ui/tokens"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/paginator"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
 const (

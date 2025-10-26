@@ -24,7 +24,7 @@ Usage:
 # Install
 
 ```sh
-go install codeberg.org/thekarel/rum@latest
+go install github.com/thekarel/rum@latest
 ```
 
 # Gif
