@@ -24,7 +24,11 @@ Usage:
 # Install
 
 ```sh
+# If you have go https://go.dev/doc/install
 go install github.com/thekarel/rum@latest
+
+# if you have eget https://github.com/zyedidia/eget
+eget thekarel/rum
 ```
 
 # Gif
