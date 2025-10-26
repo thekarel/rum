@@ -41,6 +41,12 @@ go install github.com/thekarel/rum@latest
 eget thekarel/rum
 ```
 
+# About
+
+Repo: https://github.com/thekarel/rum
+
+Issues: https://github.com/thekarel/rum/issues
+
 # Gif
 
 ![Demo](https://raw.githubusercontent.com/thekarel/rum/main/rum.gif)
