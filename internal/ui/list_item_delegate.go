@@ -10,26 +10,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var nameStyle = lipgloss.NewStyle().
-	PaddingLeft(2).
-	Bold(false)
-
-var selectedNameStyle = lipgloss.NewStyle().
-	// Background(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
-	// Border(lipgloss.ThickBorder(), false, false, false, true).
-	// BorderForeground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
-	// PaddingLeft(1).
-	Bold(true)
-
-var cmdStyle = lipgloss.NewStyle()
-
-var selectedCmdStyle = lipgloss.NewStyle().
-	// Background(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
-	// Foreground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
-	Bold(true)
-
 var lineStyle = lipgloss.NewStyle().
-	// Background(lipgloss.AdaptiveColor{Light: tokens.PrimaryBg, Dark: tokens.PrimaryBg}).
 	Bold(false)
 
 var selectedLineStyle = lipgloss.NewStyle().
@@ -50,12 +31,8 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		return
 	}
 
-	// nameFn := nameStyle.Render
-	// cmdFn := cmdStyle.Render
 	lineFn := lineStyle.Render
 	if index == m.Index() {
-		// nameFn = selectedNameStyle.Render
-		// cmdFn = selectedCmdStyle.Render
 		lineFn = selectedLineStyle.Render
 	}
 

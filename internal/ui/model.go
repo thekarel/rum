@@ -15,7 +15,7 @@ type Model struct {
 	pm string
 	// pj is the relevant content from package.json
 	pj core.PackageJson
-	// scriptList is the list of name-command pairs in a bullbe list
+	// scriptList is the list of name-command pairs in a Bubble list
 	scriptList list.Model
 	// selected is the command selected by the user
 	selected string

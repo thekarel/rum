@@ -54,17 +54,17 @@ func Test_Find_package_manager(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pjPath, err := Normalize_path(tt.dir)
+			pjPath, err := NormalizePath(tt.dir)
 			if err != nil {
 				t.Errorf("Normalize failed: %v", err)
 			}
 
-			pj, err := Read_package_json(pjPath)
+			pj, err := ReadPackageJson(pjPath)
 			if err != nil {
 				t.Errorf("Reading JSON failed: %v", err)
 			}
 
-			got := Find_package_manager(pj, pjPath)
+			got := FindPackageManager(pj, pjPath)
 			if got != tt.expected {
 				t.Errorf("Find_package_manager(JSON: %+v, filePath: %v) = %v, want %v", pj, tt.dir, got, tt.expected)
 			}

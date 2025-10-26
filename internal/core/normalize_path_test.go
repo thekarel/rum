@@ -71,7 +71,7 @@ func TestNormalize_path(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := Normalize_path(tt.input)
+			result, err := NormalizePath(tt.input)
 
 			if err != nil {
 				t.Errorf("Normalize_path() unexpected error: %v", err)

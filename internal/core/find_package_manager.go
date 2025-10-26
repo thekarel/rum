@@ -3,18 +3,19 @@ package core
 import (
 	"os"
 	"path/filepath"
-	"regexp"
+	"strings"
 )
 
-// Find_package_manager returns the name of the JavaScript package manager used in the project
+// FindPackageManager returns the name of the JavaScript package manager used in the project
 // pj is the parsed JSON
 // filePath is the path to the JSON, so that lock files etc can be discovered.
-func Find_package_manager(pj PackageJson, filePath string) string {
+func FindPackageManager(pj PackageJson, filePath string) string {
 	if pj.PackageManager != "" {
 
-		re := regexp.MustCompile(`@.*$`)
-		pm := re.ReplaceAllString(pj.PackageManager, "")
-		return pm
+		pm := strings.Split(pj.PackageManager, "@")[0]
+		if pm != "" {
+			return pm
+		}
 	}
 
 	if pj.DevEngines.PackageManager.Name != "" {

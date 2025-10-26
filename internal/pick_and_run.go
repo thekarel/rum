@@ -13,18 +13,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func Pick_and_run(searchPath string) {
-	path, err := core.Normalize_path(searchPath)
+func PickAndRun(searchPath string) {
+	path, err := core.NormalizePath(searchPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	packageJson, err := core.Read_package_json(path)
+	packageJson, err := core.ReadPackageJson(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pm := core.Find_package_manager(packageJson, path)
+	pm := core.FindPackageManager(packageJson, path)
 
 	p := tea.NewProgram(ui.InitialModel(packageJson, path, pm))
 	modelOut, err := p.Run()
@@ -34,7 +34,7 @@ func Pick_and_run(searchPath string) {
 	}
 
 	model, ok := modelOut.(ui.Model)
-	if ok != true {
+	if !ok {
 		log.Fatal("Unable to get the selected command")
 	}
 
@@ -48,6 +48,7 @@ func Pick_and_run(searchPath string) {
 	cmd := exec.Command(pm, "run", name)
 	cmd.Dir = filepath.Dir(path)
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)

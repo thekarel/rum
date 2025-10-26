@@ -23,7 +23,7 @@ type PackageJson struct {
 	Scripts map[string]string
 }
 
-func Read_package_json(filePath string) (PackageJson, error) {
+func ReadPackageJson(filePath string) (PackageJson, error) {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return PackageJson{}, fmt.Errorf("Error reading the package.json at %s: %v", filePath, err)

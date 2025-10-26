@@ -25,7 +25,7 @@ You can also pass relative or absolute paths either to a folder or a file:
 		if len(args) == 1 {
 			path = args[0]
 		}
-		internal.Pick_and_run(path)
+		internal.PickAndRun(path)
 	},
 }
 
