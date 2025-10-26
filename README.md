@@ -25,6 +25,8 @@ Usage:
 
 # Install
 
+[![Attestations](https://img.shields.io/badge/Attestations-00aa00)](https://github.com/thekarel/rum/attestations)
+
 ```sh
 # If you have npm :-)
 npm i -g @thekarel/rum
