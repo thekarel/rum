@@ -6,6 +6,8 @@ TUI to list, filter and run package.json scripts.
 
 Useful in monorepos, in packages with many commands or when jumping between projects.
 
+Will use the correct package manager: npm, pnpm, yarn or bun.
+
 ```sh
 rum --help
 TUI to list, filter and run package.json scripts.
@@ -24,6 +26,12 @@ Usage:
 # Install
 
 ```sh
+# If you have npm :-)
+npm i -g @thekarel/rum
+
+# If you have npm and love delays
+npx @thekarel/rum
+
 # If you have go https://go.dev/doc/install
 go install github.com/thekarel/rum@latest
 
