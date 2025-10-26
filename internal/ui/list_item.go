@@ -14,7 +14,7 @@ type script struct {
 
 func (i script) Title() string       { return i.name }
 func (i script) Description() string { return i.cmd }
-func (i script) FilterValue() string { return i.name+i.cmd }
+func (i script) FilterValue() string { return i.name + i.cmd }
 
 func newItems(pjs map[string]string) []list.Item {
 	// This will be the final list
@@ -22,8 +22,8 @@ func newItems(pjs map[string]string) []list.Item {
 
 	// Pick out the names only...
 	names := make([]string, 0, len(pjs))
-	for name := range pjs{
-	  names = append(names, name)
+	for name := range pjs {
+		names = append(names, name)
 	}
 	// sort the names...
 	slices.SortFunc(names, func(a, b string) int {

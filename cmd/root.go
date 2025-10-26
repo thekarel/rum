@@ -9,16 +9,16 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "rum <path to package.json>",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "rum <path to folder or package.json>",
+	Short: "TUI to list, filter and run package.json scripts",
+	Long: `TUI to list, filter and run package.json scripts.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
+To list the scripts in the current folder:
+  rum
+
+You can also pass relative or absolute paths either to a folder or a file:
+  rum ./modules/thing/
+  rum /code/project/package.json`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := "."
 
@@ -47,5 +47,5 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

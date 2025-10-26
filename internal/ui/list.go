@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	bullet   = "●"
+	bullet = "●"
 )
 
 func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Model {
@@ -22,20 +22,20 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	scriptList.Styles.HelpStyle = lipgloss.NewStyle()
 
 	// Filter prompt and input text style
-	filterStyle :=  lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})
+	filterStyle := lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})
 	scriptList.FilterInput.PromptStyle = filterStyle
 	scriptList.FilterInput.TextStyle = filterStyle
 
 	// Navigation dots
 	p := paginator.New()
 	p.Type = paginator.Dots
-	p.ActiveDot =  lipgloss.NewStyle().
-		Foreground(lipgloss.AdaptiveColor{Light:tokens.Primary, Dark:tokens.Secondary}).
+	p.ActiveDot = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
 		SetString(bullet).
 		PaddingLeft(1).
 		String()
 	p.InactiveDot = lipgloss.NewStyle().
-		Foreground(lipgloss.AdaptiveColor{Light:tokens.Secondary, Dark:tokens.Tertiary}).
+		Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Tertiary}).
 		SetString(bullet).
 		PaddingLeft(1).
 		String()
