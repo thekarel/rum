@@ -5,19 +5,13 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/thekarel/rum/internal/core"
-	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
-var headerStyle = lipgloss.NewStyle().
-	Background(lipgloss.Color(tokens.PrimaryBg)).
-	Padding(1, 2)
+var headerStyle = lipgloss.NewStyle()
 
-var titleStyle = lipgloss.NewStyle().
-	Bold(true).
-	Foreground(lipgloss.Color(tokens.Primary))
+var titleStyle = lipgloss.NewStyle().Bold(true)
 
-var subTitleStyle = lipgloss.NewStyle().
-	Foreground(lipgloss.Color(tokens.Tertiary))
+var subTitleStyle = lipgloss.NewStyle()
 
 // Header renders the app's header
 // width: the width of the header
@@ -25,12 +19,26 @@ var subTitleStyle = lipgloss.NewStyle().
 // pm: the detected package manager's name
 // path: the file path
 func Header(width int, pj core.PackageJson, pm string, path string) string {
-	return headerStyle.Width(width).Render(
-		fmt.Sprintf(
-			"%s\n%s\n%s",
-			titleStyle.Render(pj.Name),
-			subTitleStyle.Render(path),
-			subTitleStyle.Render(pm),
-		),
+	pm = pm + " ⌁"
+
+	text := fmt.Sprintf(
+		"%s %s %s",
+		subTitleStyle.Render(pm),
+		titleStyle.Render(pj.Name),
+		subTitleStyle.Render(path),
 	)
+
+	if len(text) > width {
+		text = fmt.Sprintf(
+			"%s %s",
+			subTitleStyle.Render(pm),
+			titleStyle.Render(pj.Name),
+		)
+	}
+
+	if len(text) > width {
+		text = titleStyle.Render(pj.Name)
+	}
+
+	return headerStyle.Width(width).Render(text)
 }

@@ -1,6 +1,11 @@
 package ui
 
 import (
+	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/thekarel/rum/internal/core"
@@ -40,9 +45,19 @@ func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 	// In the height +5 is the help bar and other cruft
 	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+4)
 
+	path := filePath
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+	path = strings.Replace(path, homeDir, "~", 1)
+	path = strings.Replace(path, "package.json", "", 1)
+
+	fmt.Println(homeDir)
+
 	return Model{
 		nameWidth:  nameWidth,
-		path:       filePath,
+		path:       path,
 		pj:         pj,
 		pm:         pm,
 		scriptList: scriptList,
