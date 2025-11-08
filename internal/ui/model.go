@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -41,9 +40,9 @@ func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 	}
 
 	items := newItems(pj.Scripts)
-	// The width will be update once we get the window width in model.Update
-	// In the height +5 is the help bar and other cruft
-	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+4)
+	// Width will be update once we get the window width in model.Update
+	// Height: +N is the header, this will also be updated on window height change.
+	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+2)
 
 	path := filePath
 	homeDir, err := os.UserHomeDir()
@@ -52,8 +51,6 @@ func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 	}
 	path = strings.Replace(path, homeDir, "~", 1)
 	path = strings.Replace(path, "package.json", "", 1)
-
-	fmt.Println(homeDir)
 
 	return Model{
 		nameWidth:  nameWidth,
@@ -86,6 +83,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.winWidth = msg.Width
 		m.scriptList.SetWidth(msg.Width)
+		m.scriptList.SetHeight(msg.Height - 2)
 	}
 
 	var cmd tea.Cmd
