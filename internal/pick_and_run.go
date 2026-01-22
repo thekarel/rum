@@ -26,7 +26,11 @@ func PickAndRun(searchPath string) {
 
 	pm := core.FindPackageManager(packageJson, path)
 
-	p := tea.NewProgram(ui.InitialModel(packageJson, path, pm))
+	p := tea.NewProgram(ui.InitialModel(ui.ModelInitOpts{
+		Pj: packageJson,
+		FilePath: path,
+		Pm: pm,
+	}))
 	modelOut, err := p.Run()
 
 	if err != nil {
@@ -53,5 +57,4 @@ func PickAndRun(searchPath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

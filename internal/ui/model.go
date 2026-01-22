@@ -31,20 +31,36 @@ func (m Model) GetSelected() string {
 	return m.selected
 }
 
-func InitialModel(pj core.PackageJson, filePath, pm string) Model {
+type ModelInitOpts struct {
+	Pj core.PackageJson
+	FilePath string
+	Pm string
+	WinWidth int
+	Readonly bool
+}
+
+func InitialModel(opts ModelInitOpts) Model {
 	nameWidth := 0
-	for name := range pj.Scripts {
+	for name := range opts.Pj.Scripts {
 		if len(name) > nameWidth {
 			nameWidth = len(name)
 		}
 	}
 
-	items := newItems(pj.Scripts)
+	items := newItems(opts.Pj.Scripts)
 	// Width will be update once we get the window width in model.Update
 	// Height: +N is the header, this will also be updated on window height change.
-	scriptList := newList(items, newItemDelegate(nameWidth), 80, len(items)+2)
+	scriptList := newList(items, newItemDelegate(nameWidth, !opts.Readonly), 80, len(items)+2)
 
-	path := filePath
+	if opts.Readonly {
+		scriptList.SetShowPagination(false)
+		scriptList.SetShowStatusBar(false)
+		scriptList.SetShowHelp(false)
+		scriptList.SetHeight(len(items))
+	}
+
+
+	path := opts.FilePath
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
@@ -55,8 +71,9 @@ func InitialModel(pj core.PackageJson, filePath, pm string) Model {
 	return Model{
 		nameWidth:  nameWidth,
 		path:       path,
-		pj:         pj,
-		pm:         pm,
+		pj:         opts.Pj,
+		pm:         opts.Pm,
+		winWidth: opts.WinWidth,
 		scriptList: scriptList,
 	}
 }

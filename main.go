@@ -17,16 +17,24 @@ You can also pass relative or absolute paths either to a folder or a file:
   rum ./modules/thing/
   rum /code/project/package.json
 
+To show a non iteractive list:
+  run -l /path/to/somewhere
+
 Usage:
 
-  rum [flags] <path to folder or package.json>`
+  rum [flags] <path to folder or package.json>
+
+Flags:
+  -h        display help
+  -l        list scripts`
 
 func help() {
 	fmt.Fprintf(os.Stdout, "%s \n", helpText)
 }
 
 func main() {
-	var helpFlag = flag.Bool("help", false, "display help")
+	var helpFlag = flag.Bool("h", false, "display help")
+	var listFlag = flag.Bool("l", false, "list scripts")
 
 	flag.Parse()
 
@@ -36,14 +44,14 @@ func main() {
 	}
 
 	path := "."
-	if len(flag.Args()) > 1 {
-		fmt.Fprintf(os.Stdout, "Too many arguments")
-		os.Exit(1)
-	}
 
 	if len(flag.Args()) == 1 {
 		path = flag.Arg(0)
 	}
 
-	internal.PickAndRun(path)
+	if *listFlag {
+		internal.ListScripts(path)
+	} else {
+		internal.PickAndRun(path)
+	}
 }

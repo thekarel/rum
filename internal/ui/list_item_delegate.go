@@ -20,6 +20,7 @@ var selectedLineStyle = lipgloss.NewStyle().
 
 type itemDelegate struct {
 	nameWidth int
+	highlight bool
 }
 
 func (d itemDelegate) Height() int                             { return 1 }
@@ -32,7 +33,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	}
 
 	lineFn := lineStyle.Render
-	if index == m.Index() {
+	if index == m.Index() && d.highlight {
 		lineFn = selectedLineStyle.Render
 	}
 
@@ -45,8 +46,9 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 	)
 }
 
-func newItemDelegate(nameWidth int) itemDelegate {
+func newItemDelegate(nameWidth int, highlight bool) itemDelegate {
 	return itemDelegate{
 		nameWidth: nameWidth,
+		highlight: highlight,
 	}
 }

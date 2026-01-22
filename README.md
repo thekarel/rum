@@ -9,7 +9,8 @@ Useful in monorepos, in packages with many commands or when jumping between proj
 Will use the correct package manager: npm, pnpm, yarn or bun.
 
 ```sh
-rum --help
+rum -h
+
 TUI to list, filter and run package.json scripts.
 
 To list the scripts in the current folder:
@@ -18,9 +19,17 @@ To list the scripts in the current folder:
 You can also pass relative or absolute paths either to a folder or a file:
   rum ./modules/thing/
   rum /code/project/package.json
+  
+To show a non iteractive list:
+  run -l /path/to/somewhere
 
 Usage:
-  rum <path to folder or package.json> [flags]
+
+  rum [flags] <path to folder or package.json>
+
+Flags:
+  -h        display help
+  -l        list scripts
 ```
 
 # Install
