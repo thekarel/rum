@@ -122,6 +122,22 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, clearFlashAfter(2 * time.Second)
 			}
 		}
+
+		// Copy and quit on C
+		if msg.String() == "C" && m.scriptList.FilterState() != list.Filtering {
+			sel := m.scriptList.SelectedItem()
+			if sel != nil {
+				selCmd := sel.(script).cmd
+
+				_, err := nativeclipboard.Text.Write([]byte(selCmd))
+				if err == nil {
+					return m, tea.Quit
+				} else {
+					m.flash = "Copy not supported :("
+				}
+				return m, clearFlashAfter(2 * time.Second)
+			}
+		}
 	case tea.WindowSizeMsg:
 		m.winWidth = msg.Width
 		m.scriptList.SetWidth(msg.Width)

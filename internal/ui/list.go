@@ -25,18 +25,22 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	// Add custom key binding for enter/run command
 	enterKey := key.NewBinding(
 		key.WithKeys("enter"),
-		key.WithHelp("enter", "run the selected command"),
+		key.WithHelp("enter", "Run selected command"),
 	)
 	// Add custom key binding for copy command
 	copyKey := key.NewBinding(
 		key.WithKeys("c"),
-		key.WithHelp("c", "copy command to clipboard"),
+		key.WithHelp("c", "Copy command to clipboard"),
+	)
+	copyQuitKey := key.NewBinding(
+		key.WithKeys("C"),
+		key.WithHelp("C", "Copy command & quit"),
 	)
 	scriptList.AdditionalShortHelpKeys = func() []key.Binding {
-		return []key.Binding{copyKey, enterKey}
+		return []key.Binding{copyKey, copyQuitKey, enterKey}
 	}
 	scriptList.AdditionalFullHelpKeys = func() []key.Binding {
-		return []key.Binding{copyKey, enterKey}
+		return []key.Binding{copyKey, copyQuitKey, enterKey}
 	}
 
 	// Filter prompt and input text style
