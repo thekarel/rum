@@ -32,7 +32,7 @@ Flags:
   -l        list scripts
 ```
 
-In the script list press `Enter` to run the selected command or `c` top copy it to the clipboard.
+In the script list press `Enter` to run the selected command or `c` to copy it to the clipboard.
 
 # Install
 
