@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aymanbagabas/go-nativeclipboard"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/thekarel/rum/internal/core"
@@ -113,12 +112,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.String() == "c" && m.scriptList.FilterState() != list.Filtering {
 			sel := m.scriptList.SelectedItem()
 			if sel != nil {
-				_, err := nativeclipboard.Text.Write([]byte(sel.(script).cmd))
-				if err == nil {
-					m.flash = "Copied to clipboard ✔︎"
-				} else {
-					m.flash = "Copy not supported :("
-				}
+				CopyToClipboard(sel.(script).cmd)
+				m.flash = "Copied to clipboard ✔︎"
 				return m, clearFlashAfter(2 * time.Second)
 			}
 		}
@@ -127,15 +122,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.String() == "C" && m.scriptList.FilterState() != list.Filtering {
 			sel := m.scriptList.SelectedItem()
 			if sel != nil {
-				selCmd := sel.(script).cmd
-
-				_, err := nativeclipboard.Text.Write([]byte(selCmd))
-				if err == nil {
-					return m, tea.Quit
-				} else {
-					m.flash = "Copy not supported :("
-				}
-				return m, clearFlashAfter(2 * time.Second)
+				CopyToClipboard(sel.(script).cmd)
+				return m, tea.Quit
 			}
 		}
 	case tea.WindowSizeMsg:

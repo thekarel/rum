@@ -2,40 +2,29 @@
 
 > Is it npm test or was it pnpm test:watch?!
 
-TUI to list, filter and run package.json scripts.
+TUI to list, search, run or copy package.json scripts.
 
 Useful in monorepos, in packages with many commands or when jumping between projects.
 
 Will use the correct package manager: npm, pnpm, yarn or bun.
 
+# Usage
+
 ```sh
-rum -h
-
-TUI to list, filter and run package.json scripts.
-
-To list the scripts in the current folder:
-  rum
-
-You can also pass relative or absolute paths either to a folder or a file:
-  rum ./modules/thing/
-  rum /code/project/package.json
-  
-To show a non iteractive list:
-  run -l /path/to/somewhere
-
-Usage:
-
-  rum [flags] <path to folder or package.json>
-
-Flags:
-  -h        display help
-  -l        list scripts
+rum # List scripts in the current folder in a TUI
+rum ./modules/thing/ # List scripts in the folder
+rum /code/project/package.json # List scripts in the package.json file
+run -l [optional path] # List scripts and quit (non-interactive)
+rum -h # Show help
 ```
 
-In the script list 
+In the TUI
+
 - press `Enter` to run the selected command,
 - `c` to copy it to the clipboard, or
 - `C` to copy and quit.
+
+The clipboard might not be supported on all platforms.
 
 # Install
 
