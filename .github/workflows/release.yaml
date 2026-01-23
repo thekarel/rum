@@ -23,6 +23,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
+      - name: Add X11 clipboard libs
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
