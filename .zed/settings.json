@@ -1,0 +1,13 @@
+{
+  "format_on_save": "on",
+  "languages": {
+    "Go": {
+      "formatter": {
+        "external": {
+          "command": "gofmt",
+          "arguments": []
+        }
+      }
+    }
+  }
+}

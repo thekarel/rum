@@ -4,7 +4,9 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/aymanbagabas/go-nativeclipboard"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/thekarel/rum/internal/core"
@@ -25,6 +27,8 @@ type Model struct {
 	selected string
 	// the width of the window
 	winWidth int
+	// flash message
+	flash string
 }
 
 func (m Model) GetSelected() string {
@@ -32,9 +36,9 @@ func (m Model) GetSelected() string {
 }
 
 type ModelInitOpts struct {
-	Pj core.PackageJson
+	Pj       core.PackageJson
 	FilePath string
-	Pm string
+	Pm       string
 	WinWidth int
 	Readonly bool
 }
@@ -59,7 +63,6 @@ func InitialModel(opts ModelInitOpts) Model {
 		scriptList.SetHeight(len(items))
 	}
 
-
 	path := opts.FilePath
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -73,7 +76,7 @@ func InitialModel(opts ModelInitOpts) Model {
 		path:       path,
 		pj:         opts.Pj,
 		pm:         opts.Pm,
-		winWidth: opts.WinWidth,
+		winWidth:   opts.WinWidth,
 		scriptList: scriptList,
 	}
 }
@@ -88,7 +91,15 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
-		if msg.String() == "enter" {
+
+		// Handle pressing enter, but do nothing if the list is being filtered,
+		// in order to allow the user to
+		// 1. Press /
+		// 2. Type a search term
+		// 3. See the filtered list, move up or down
+		// 4. Press enter -> This stops the filtering and selects a command without executing it.
+		// The user then can decide what to do with it (run or copy, for example).
+		if msg.String() == "enter" && m.scriptList.FilterState() != list.Filtering {
 			sel := m.scriptList.SelectedItem()
 			if sel == nil {
 				return m, nil
@@ -97,10 +108,27 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.selected = sel.(script).name
 			return m, tea.Quit
 		}
+
+		// Copy the command to the clipboard
+		if msg.String() == "c" && m.scriptList.FilterState() != list.Filtering {
+			sel := m.scriptList.SelectedItem()
+			if sel != nil {
+				_, err := nativeclipboard.Text.Write([]byte(sel.(script).cmd))
+				if err == nil {
+					m.flash = "Copied to clipboard ✔︎"
+				} else {
+					m.flash = "Copy not supported :("
+				}
+				return m, clearFlashAfter(2 * time.Second)
+			}
+		}
 	case tea.WindowSizeMsg:
 		m.winWidth = msg.Width
 		m.scriptList.SetWidth(msg.Width)
 		m.scriptList.SetHeight(msg.Height - 2)
+
+	case clearFlashMsg:
+		m.flash = ""
 	}
 
 	var cmd tea.Cmd
@@ -110,7 +138,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	s := "\n"
-	s += Header(m.winWidth, m.pj, m.pm, m.path)
+	s += Header(m.winWidth, m.pj, m.pm, m.path, m.flash)
 	s += "\n"
 	s += m.scriptList.View()
 

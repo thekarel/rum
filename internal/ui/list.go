@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/paginator"
 	"github.com/charmbracelet/lipgloss"
@@ -20,6 +21,23 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	scriptList.Styles.TitleBar = lipgloss.NewStyle()
 	// Remove padding from help
 	scriptList.Styles.HelpStyle = lipgloss.NewStyle()
+
+	// Add custom key binding for enter/run command
+	enterKey := key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "run the selected command"),
+	)
+	// Add custom key binding for copy command
+	copyKey := key.NewBinding(
+		key.WithKeys("c"),
+		key.WithHelp("c", "copy command to clipboard"),
+	)
+	scriptList.AdditionalShortHelpKeys = func() []key.Binding {
+		return []key.Binding{copyKey, enterKey}
+	}
+	scriptList.AdditionalFullHelpKeys = func() []key.Binding {
+		return []key.Binding{copyKey, enterKey}
+	}
 
 	// Filter prompt and input text style
 	filterStyle := lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})

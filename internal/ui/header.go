@@ -18,14 +18,15 @@ var subTitleStyle = lipgloss.NewStyle()
 // pj: the package.json content
 // pm: the detected package manager's name
 // path: the file path
-func Header(width int, pj core.PackageJson, pm string, path string) string {
+func Header(width int, pj core.PackageJson, pm string, path string, flash string) string {
 	pm = pm + " ⌁"
 
 	text := fmt.Sprintf(
-		"%s %s %s",
+		"%s %s %s %s",
 		subTitleStyle.Render(pm),
 		titleStyle.Render(pj.Name),
 		subTitleStyle.Render(path),
+		flashStyle.Render(flash),
 	)
 
 	if len(text) > width {

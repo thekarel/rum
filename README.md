@@ -32,6 +32,8 @@ Flags:
   -l        list scripts
 ```
 
+In the script list press `Enter` to run the selected command or `c` top copy it to the clipboard.
+
 # Install
 
 [![Attestations](https://img.shields.io/badge/Attestations-00aa00)](https://github.com/thekarel/rum/attestations)

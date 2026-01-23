@@ -27,9 +27,9 @@ func PickAndRun(searchPath string) {
 	pm := core.FindPackageManager(packageJson, path)
 
 	p := tea.NewProgram(ui.InitialModel(ui.ModelInitOpts{
-		Pj: packageJson,
+		Pj:       packageJson,
 		FilePath: path,
-		Pm: pm,
+		Pm:       pm,
 	}))
 	modelOut, err := p.Run()
 
