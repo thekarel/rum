@@ -21,6 +21,11 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	scriptList.Styles.TitleBar = lipgloss.NewStyle()
 	// Remove padding from help
 	scriptList.Styles.HelpStyle = lipgloss.NewStyle()
+	// Set help keybinding text to something more readable
+	scriptList.Help.Styles.ShortKey = lipgloss.NewStyle().Foreground(lipgloss.Color(tokens.Secondary))
+	scriptList.Help.Styles.ShortDesc = lipgloss.NewStyle()
+	scriptList.Help.Styles.FullKey = lipgloss.NewStyle().Foreground(lipgloss.Color(tokens.Secondary))
+	scriptList.Help.Styles.FullDesc = lipgloss.NewStyle()
 
 	// Add custom key binding for enter/run command
 	enterKey := key.NewBinding(
