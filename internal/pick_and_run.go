@@ -47,7 +47,7 @@ func PickAndRun(searchPath string) {
 		os.Exit(0)
 	}
 
-	fmt.Printf("%s run %s\n", pm, name)
+	fmt.Println(model.RunCommand())
 
 	cmd := exec.Command(pm, "run", name)
 	cmd.Dir = filepath.Dir(path)

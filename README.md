@@ -20,9 +20,9 @@ rum -h # Show help
 
 In the TUI
 
-- press `Enter` to run the selected command,
-- `c` to copy it to the clipboard, or
-- `C` to copy and quit.
+- press `Enter` to run the selected command
+- `c` to copy the "run" command to the clipboard (e.g. to copy "npm run lint:fix")
+- `C` to copy the actual script to the clipboard (e.g. to copy "oxlint --fix")
 
 The clipboard might not be supported on all platforms.
 

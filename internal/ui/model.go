@@ -1,10 +1,10 @@
 package ui
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -32,6 +32,19 @@ type Model struct {
 
 func (m Model) GetSelected() string {
 	return m.selected
+}
+
+// RunCommand returns the run command as a string.
+// Example: "pnpm run db:overload"
+func (m Model) RunCommand() string {
+	sel := m.scriptList.SelectedItem()
+	if sel == nil {
+		return ""
+	}
+
+	name := sel.(script).name
+
+	return fmt.Sprintf("%s run %s", m.pm, name)
 }
 
 type ModelInitOpts struct {
@@ -91,6 +104,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
+		// The keys below don't have effect while filtering
+		if m.scriptList.FilterState() == list.Filtering {
+			break
+		}
+
+		// The keys below assume there is a selected command
+		sel := m.scriptList.SelectedItem()
+		if sel == nil {
+			break
+		}
+
 		// Handle pressing enter, but do nothing if the list is being filtered,
 		// in order to allow the user to
 		// 1. Press /
@@ -98,33 +122,21 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// 3. See the filtered list, move up or down
 		// 4. Press enter -> This stops the filtering and selects a command without executing it.
 		// The user then can decide what to do with it (run or copy, for example).
-		if msg.String() == "enter" && m.scriptList.FilterState() != list.Filtering {
-			sel := m.scriptList.SelectedItem()
-			if sel == nil {
-				return m, nil
-			}
-
+		if msg.String() == "enter" {
 			m.selected = sel.(script).name
 			return m, tea.Quit
 		}
 
 		// Copy the command to the clipboard
-		if msg.String() == "c" && m.scriptList.FilterState() != list.Filtering {
-			sel := m.scriptList.SelectedItem()
-			if sel != nil {
-				CopyToClipboard(sel.(script).cmd)
-				m.flash = "Copied to clipboard ✔︎"
-				return m, clearFlashAfter(2 * time.Second)
-			}
+		if msg.String() == "c" {
+			CopyToClipboard(m.RunCommand())
+			return m, tea.Quit
 		}
 
 		// Copy and quit on C
-		if msg.String() == "C" && m.scriptList.FilterState() != list.Filtering {
-			sel := m.scriptList.SelectedItem()
-			if sel != nil {
-				CopyToClipboard(sel.(script).cmd)
-				return m, tea.Quit
-			}
+		if msg.String() == "C" {
+			CopyToClipboard(sel.(script).cmd)
+			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
 		m.winWidth = msg.Width
