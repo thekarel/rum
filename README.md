@@ -18,11 +18,15 @@ run -l [optional path] # List scripts and quit (non-interactive)
 rum -h # Show help
 ```
 
-In the TUI
+In the TUI:
 
-- press `Enter` to run the selected command
-- `c` to copy the "run" command to the clipboard (e.g. to copy "npm run lint:fix")
-- `C` to copy the actual script to the clipboard (e.g. to copy "oxlint --fix")
+Press `Enter` to run the selected command. This will `cd` into the correct folder, run the script using
+the correct package manager and show you the output.
+
+Press `c` to copy the "run" command to the clipboard (e.g. "npm run lint:fix") and quit. You can then paste it
+into your terminal and run or edit the command. This way the command can be added to your shell history.
+
+Press `shift+c` to copy the actual script to the clipboard (e.g. "oxlint --fix") and quit.
 
 The clipboard might not be supported on all platforms.
 
