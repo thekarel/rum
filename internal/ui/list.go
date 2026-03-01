@@ -1,10 +1,10 @@
 package ui
 
 import (
-	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/list"
-	"github.com/charmbracelet/bubbles/paginator"
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/bubbles/v2/key"
+	"charm.land/bubbles/v2/list"
+	"charm.land/bubbles/v2/paginator"
+	"charm.land/lipgloss/v2"
 	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
@@ -49,20 +49,24 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	}
 
 	// Filter prompt and input text style
-	filterStyle := lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Secondary})
-	scriptList.FilterInput.PromptStyle = filterStyle
-	scriptList.FilterInput.TextStyle = filterStyle
+	filterStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(tokens.Secondary))
+	fiStyles := scriptList.FilterInput.Styles()
+	fiStyles.Focused.Prompt = filterStyle
+	fiStyles.Focused.Text = filterStyle
+	fiStyles.Blurred.Prompt = filterStyle
+	fiStyles.Blurred.Text = filterStyle
+	scriptList.FilterInput.SetStyles(fiStyles)
 
 	// Navigation dots
 	p := paginator.New()
 	p.Type = paginator.Dots
 	p.ActiveDot = lipgloss.NewStyle().
-		Foreground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
+		Foreground(lipgloss.Color(tokens.Secondary)).
 		SetString(bullet).
 		PaddingLeft(1).
 		String()
 	p.InactiveDot = lipgloss.NewStyle().
-		Foreground(lipgloss.AdaptiveColor{Light: tokens.Secondary, Dark: tokens.Tertiary}).
+		Foreground(lipgloss.Color(tokens.Tertiary)).
 		SetString(bullet).
 		PaddingLeft(1).
 		String()

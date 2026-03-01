@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/charmbracelet/bubbles/list"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/bubbles/v2/list"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
@@ -14,8 +14,8 @@ var lineStyle = lipgloss.NewStyle().
 	Bold(false)
 
 var selectedLineStyle = lipgloss.NewStyle().
-	Background(lipgloss.AdaptiveColor{Light: tokens.PrimaryBg, Dark: tokens.PrimaryBg}).
-	Foreground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary}).
+	Background(lipgloss.Color(tokens.PrimaryBg)).
+	Foreground(lipgloss.Color(tokens.Secondary)).
 	Bold(true)
 
 type itemDelegate struct {

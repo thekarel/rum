@@ -29,5 +29,5 @@ func ListScripts(searchPath string) {
 		Readonly: true,
 	})
 
-	fmt.Println(model.View())
+	fmt.Println(model.View().Content)
 }

@@ -3,8 +3,8 @@ package ui
 import (
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/thekarel/rum/internal/ui/tokens"
 )
 
@@ -17,4 +17,4 @@ func clearFlashAfter(d time.Duration) tea.Cmd {
 }
 
 var flashStyle = lipgloss.NewStyle().
-	Foreground(lipgloss.AdaptiveColor{Light: tokens.Primary, Dark: tokens.Secondary})
+	Foreground(lipgloss.Color(tokens.Secondary))

@@ -10,7 +10,7 @@ import (
 	"github.com/thekarel/rum/internal/core"
 	"github.com/thekarel/rum/internal/ui"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 )
 
 func PickAndRun(searchPath string) {
