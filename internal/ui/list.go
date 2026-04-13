@@ -35,11 +35,11 @@ func newList(scripts []list.Item, delegate list.ItemDelegate, w, h int) list.Mod
 	// Add custom key binding for copy command
 	copyKey := key.NewBinding(
 		key.WithKeys("c"),
-		key.WithHelp("c", "Copy run command and quit"),
+		key.WithHelp("c", "Copy invocation and quit"),
 	)
 	copyQuitKey := key.NewBinding(
 		key.WithKeys("C"),
-		key.WithHelp("C", "Copy script and quit"),
+		key.WithHelp("C", "Copy script content and quit"),
 	)
 	scriptList.AdditionalShortHelpKeys = func() []key.Binding {
 		return []key.Binding{copyKey, copyQuitKey, enterKey}
