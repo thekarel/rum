@@ -51,7 +51,7 @@ jobs:
             --files LICENSE --files README.md \
             --keywords cli --keywords tui --keywords "package.json"
       - name: Upgrade npm
-        run: npm install -g npm@latest
+        run: corepack install -g npm@latest
       - name: Publish NPM packages
         run: |
           npm --version
