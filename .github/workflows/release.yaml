@@ -43,11 +43,9 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
-      - name: Install goreleaser-npm-publisher
-        run: go install github.com/evg4b/goreleaser-npm-publisher@latest
       - name: Build NPM packages
         run: |
-          goreleaser-npm-publisher build \
+          npx -y goreleaser-npm-publisher build \
             --prefix "@thekarel" \
             --description "TUI to list, filter and run package.json scripts." \
             --files LICENSE --files README.md \
