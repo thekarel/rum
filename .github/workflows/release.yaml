@@ -37,17 +37,25 @@ jobs:
         with:
           subject-checksums: ./dist/checksums.txt
 
-      # Publish NPM packages
-      - name: Build and publish NPM packages
-        uses: evg4b/goreleaser-npm-publisher-action@v1.2.0
+      # Publish NPM packages via Trusted Publishing (OIDC)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.NPM_AUTH_TOKEN }}
-          prefix: "@thekarel"
-          description: "TUI to list, filter and run package.json scripts."
-          files: |-
-            LICENSE
-            README.md
-          keywords: |-
-            cli
-            tui
-            package.json
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install goreleaser-npm-publisher
+        run: go install github.com/evg4b/goreleaser-npm-publisher@latest
+      - name: Build NPM packages
+        run: |
+          goreleaser-npm-publisher build \
+            --prefix "@thekarel" \
+            --description "TUI to list, filter and run package.json scripts." \
+            --files LICENSE --files README.md \
+            --keywords cli --keywords tui --keywords "package.json"
+      - name: Publish NPM packages
+        run: |
+          npm --version
+          for pkg in dist/npm/*/; do
+            echo "Publishing $pkg..."
+            npm publish "$pkg" --access public --provenance
+          done
