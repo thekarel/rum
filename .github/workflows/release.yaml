@@ -50,6 +50,11 @@ jobs:
             --description "TUI to list, filter and run package.json scripts." \
             --files LICENSE --files README.md \
             --keywords cli --keywords tui --keywords "package.json"
+      - name: Add repository URL to generated packages
+        run: |
+          for pkg in dist/npm/*/package.json; do
+            npm pkg set "repository.type=git" "repository.url=https://github.com/thekarel/rum" --prefix "$(dirname "$pkg")"
+          done
       - name: Publish NPM packages
         run: |
           npm --version
