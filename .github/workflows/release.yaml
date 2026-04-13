@@ -41,7 +41,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
       - name: Build NPM packages
         run: |
@@ -50,8 +50,6 @@ jobs:
             --description "TUI to list, filter and run package.json scripts." \
             --files LICENSE --files README.md \
             --keywords cli --keywords tui --keywords "package.json"
-      - name: Upgrade npm
-        run: corepack install -g npm@latest
       - name: Publish NPM packages
         run: |
           npm --version
