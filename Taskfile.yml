@@ -16,3 +16,9 @@ tasks:
       - '**/*.go'
     cmds:
       - go test ./...
+
+  bin:
+    desc: Build the CLI and copy to ~/bin
+    cmds:
+      - go build .
+      - mv ./rum ~/bin
