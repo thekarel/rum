@@ -1,0 +1,6 @@
+{
+  "name": "child",
+  "scripts": {
+    "build": "echo build"
+  }
+}

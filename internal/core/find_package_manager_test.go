@@ -50,6 +50,11 @@ func Test_Find_package_manager(t *testing.T) {
 			expected: "bun",
 			dir:      "testing/dev-engines-bun",
 		},
+		{
+			name:     "finds pnpm lock file in parent directory (monorepo subfolder)",
+			expected: "pnpm",
+			dir:      "testing/pnpm-lock/packages/child",
+		},
 	}
 
 	for _, tt := range tests {

@@ -22,22 +22,28 @@ func FindPackageManager(pj PackageJson, filePath string) string {
 		return pj.DevEngines.PackageManager.Name
 	}
 
+	lockFiles := map[string]string{
+		"package-lock.json": "npm",
+		"pnpm-lock.yaml":   "pnpm",
+		"yarn.lock":         "yarn",
+		"bun.lockb":         "bun",
+	}
+
+	// Walk up the directory tree to find a lock file.
+	// This handles monorepo subfolders where the lock file is at the root.
 	dir := filepath.Dir(filePath)
+	for {
+		for lockFile, pm := range lockFiles {
+			if _, err := os.Stat(filepath.Join(dir, lockFile)); err == nil {
+				return pm
+			}
+		}
 
-	if _, err := os.Stat(filepath.Join(dir, "package-lock.json")); err == nil {
-		return "npm"
-	}
-
-	if _, err := os.Stat(filepath.Join(dir, "pnpm-lock.yaml")); err == nil {
-		return "pnpm"
-	}
-
-	if _, err := os.Stat(filepath.Join(dir, "yarn.lock")); err == nil {
-		return "yarn"
-	}
-
-	if _, err := os.Stat(filepath.Join(dir, "bun.lockb")); err == nil {
-		return "bun"
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			break
+		}
+		dir = parent
 	}
 
 	// npm is the default
