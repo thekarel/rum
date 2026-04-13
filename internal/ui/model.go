@@ -24,6 +24,8 @@ type Model struct {
 	scriptList list.Model
 	// selected is the command selected by the user
 	selected string
+	// subDir is the relative path from cwd to the package.json directory, empty if same
+	subDir string
 	// the width of the window
 	winWidth int
 	// flash message
@@ -47,10 +49,62 @@ func (m Model) RunCommand() string {
 	return fmt.Sprintf("%s run %s", m.pm, name)
 }
 
+// CopyRunCommand returns a command string suitable for pasting from the cwd.
+// When running in a subfolder, it uses the package manager's workspace filter
+// flag (e.g. "pnpm -F pkg run script") so the command works from the project root.
+// Falls back to "cd dir && pm run script" when the package name is not available.
+func (m Model) CopyRunCommand() string {
+	sel := m.scriptList.SelectedItem()
+	if sel == nil {
+		return ""
+	}
+
+	name := sel.(script).name
+	baseCmd := fmt.Sprintf("%s run %s", m.pm, name)
+
+	if m.subDir == "" {
+		return baseCmd
+	}
+
+	if m.pj.Name != "" {
+		switch m.pm {
+		case "pnpm":
+			return fmt.Sprintf("pnpm -F %s run %s", m.pj.Name, name)
+		case "npm":
+			return fmt.Sprintf("npm -w %s run %s", m.pj.Name, name)
+		case "yarn":
+			return fmt.Sprintf("yarn workspace %s run %s", m.pj.Name, name)
+		case "bun":
+			return fmt.Sprintf("bun --filter %s run %s", m.pj.Name, name)
+		}
+	}
+
+	return fmt.Sprintf("cd %s && %s", m.subDir, baseCmd)
+}
+
+// CopyScriptCommand returns the raw script command, prefixed with "cd dir &&"
+// when running in a subfolder so it can be pasted from the project root.
+// The command is run through the package manager so that it resolves correctly.
+func (m Model) CopyScriptCommand() string {
+	sel := m.scriptList.SelectedItem()
+	if sel == nil {
+		return ""
+	}
+
+	cmd := sel.(script).cmd
+
+	if m.subDir != "" {
+		return fmt.Sprintf("cd %s && %s exec %s", m.subDir, m.pm, cmd)
+	}
+
+	return cmd
+}
+
 type ModelInitOpts struct {
 	Pj       core.PackageJson
 	FilePath string
 	Pm       string
+	SubDir   string
 	WinWidth int
 	Readonly bool
 }
@@ -88,6 +142,7 @@ func InitialModel(opts ModelInitOpts) Model {
 		path:       path,
 		pj:         opts.Pj,
 		pm:         opts.Pm,
+		subDir:     opts.SubDir,
 		winWidth:   opts.WinWidth,
 		scriptList: scriptList,
 	}
@@ -129,13 +184,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// Copy the command to the clipboard
 		if msg.String() == "c" {
-			CopyToClipboard(m.RunCommand())
+			CopyToClipboard(m.CopyRunCommand())
 			return m, tea.Quit
 		}
 
 		// Copy and quit on C
 		if msg.String() == "C" {
-			CopyToClipboard(sel.(script).cmd)
+			CopyToClipboard(m.CopyScriptCommand())
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:

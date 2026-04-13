@@ -26,10 +26,22 @@ func PickAndRun(searchPath string) {
 
 	pm := core.FindPackageManager(packageJson, path)
 
+	subDir := ""
+	cwd, err := os.Getwd()
+	if err == nil {
+		pkgDir := filepath.Dir(path)
+		if pkgDir != cwd {
+			if rel, err := filepath.Rel(cwd, pkgDir); err == nil {
+				subDir = rel
+			}
+		}
+	}
+
 	p := tea.NewProgram(ui.InitialModel(ui.ModelInitOpts{
 		Pj:       packageJson,
 		FilePath: path,
 		Pm:       pm,
+		SubDir:   subDir,
 	}))
 	modelOut, err := p.Run()
 
